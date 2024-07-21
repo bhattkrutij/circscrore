@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "68805041221",
+    "project_id": "cricscrorer",
+    "storage_bucket": "cricscrorer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68805041221:android:2ae6a5f5ba0ddc2613d72c",
+        "android_client_info": {
+          "package_name": "com.example.circ_scrorer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgnHyYWqlcCed-XnsTYPuqV_GOpvveggI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

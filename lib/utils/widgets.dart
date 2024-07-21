@@ -40,7 +40,7 @@ primaryButtonStyle() {
 inputDecorationPrimary({required String hintText}) {
   return InputDecoration(
     hintText: hintText,
-    border: OutlineInputBorder(),
+    border: const OutlineInputBorder(),
   );
 }
 

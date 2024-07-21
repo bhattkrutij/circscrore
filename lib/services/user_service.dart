@@ -1,7 +1,7 @@
 import 'package:circ_scrorer/utils/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../utils/firebase_keys.dart';
+import '../utils/keys.dart';
 
 class UserService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

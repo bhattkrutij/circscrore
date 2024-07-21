@@ -6,12 +6,18 @@ import 'package:circ_scrorer/utils/app_constants.dart';
 import 'package:circ_scrorer/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'cubits/auth_cubit/auth_cubit.dart';
 import 'cubits/auth_cubit/auth_state.dart';
 
+late SharedPreferences sharedPreferences;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: primaryColor, statusBarIconBrightness: Brightness.light // Set the desired color for this screen
+      ));
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: firebaseApiKey,
@@ -20,6 +26,7 @@ Future<void> main() async {
     projectId: firebaseProjectId,
     storageBucket: firebaseStorageBucket,
   ));
+  sharedPreferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 

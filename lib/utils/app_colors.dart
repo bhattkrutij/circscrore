@@ -2,6 +2,9 @@ import 'dart:ui';
 
 const scaffoldBgColor = Color(0xFFFFFFFF);
 const primaryColor = Color(0xFF4CAF50);
+const blackColor = Color(0xFF333333);
+const whiteColor = Color(0xFFFFFFFF);
+const iconColor = Color(0xFFFFFFFF);
 const buttonBgColor = Color(0xFF4CAF50);
 const buttonTextColor = Color(0xFFFFFFFF);
 const textColorPrimary = Color(0xFF333333);

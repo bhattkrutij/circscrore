@@ -6,13 +6,21 @@ class Dimensions {
   static const double textFieldHeight = 50.0;
   static const double height100 = 100.0;
   static const double height30 = 30.0;
+  static const double height40 = 40.0;
+  static const double height50 = 50.0;
+  static const double height60 = 50.0;
+  static const double height = double.infinity;
 
   // Widths
-  static const double width = double.infinity; // Full width
+  static const double width = double.infinity;
+  static const double width60 = 60;
+  static const double width40 = 40;
+  static const double width10 = 10; // Full width
 // Full width
 
   // Padding
   static const double padding8 = 8.0;
+  static const double padding10 = 10.0;
   static const double padding16 = 16.0;
   static const double padding24 = 24.0;
 
@@ -23,4 +31,5 @@ class Dimensions {
 
   // Border Radius
   static const double borderRadius = 4.0;
+  static const double circularImageRadius = 30.0;
 }

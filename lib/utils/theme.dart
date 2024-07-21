@@ -8,10 +8,10 @@ class AppTheme {
   static final ThemeData themeData = ThemeData(
     scaffoldBackgroundColor: scaffoldBgColor,
     primaryColor: primaryColor, // Green
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: textColorPrimary), // Dark Gray
-      bodyMedium: TextStyle(color: textColorSecondary), // Gray
-    ),
+    // textTheme: const TextTheme(
+    //   bodyLarge: TextStyle(color: textColorPrimary), // Dark Gray
+    //   bodyMedium: TextStyle(color: textColorSecondary), // Gray
+    // ),
     inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: inputFieldBgColor,

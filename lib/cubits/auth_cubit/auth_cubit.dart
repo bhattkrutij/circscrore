@@ -1,7 +1,9 @@
-import 'package:circ_scrorer/utils/firebase_keys.dart';
+import 'package:circ_scrorer/utils/keys.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../services/user_service.dart';
+import '../../models/user_model.dart';
+import '../../utils/shared_pref.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -47,13 +49,12 @@ class AuthCubit extends Cubit<AuthState> {
       UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
       final User? user = userCredential.user;
       if (user != null) {
-        // Store user data in Firestore
-        final Map<String, dynamic> userData = {
-          keyUid: user.uid,
-          keyPhoneNumber: user.phoneNumber,
-        };
-        await userService.addUser(userData);
-
+        UserModel userModel = UserModel();
+        userModel.uid = user.uid;
+        userModel.phoneNumber = user.phoneNumber;
+        await userService.addUser(userModel.toJson());
+        setValue(currentUser, userModel.toJson());
+        setValue(isUserLoggedIn, true);
         emit(AuthLoggedInState(userCredential.user!));
       }
     } on FirebaseAuthException catch (ex) {

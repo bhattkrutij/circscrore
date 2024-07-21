@@ -44,8 +44,11 @@ inputDecorationPrimary({required String hintText}) {
   );
 }
 
-sizedBox({required double height}) {
-  return const SizedBox(height: Dimensions.height100);
+sizedBox({double? height, double? width}) {
+  return SizedBox(
+    height: height ?? 0,
+    width: width ?? 0,
+  );
 }
 
 commonScaffold({required BuildContext context, required String message, required Color bgColor}) {

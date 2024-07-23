@@ -1,4 +1,5 @@
 import 'package:circ_scrorer/utils/app_strings.dart';
+import 'package:circ_scrorer/utils/textstyles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,6 +41,7 @@ primaryButtonStyle() {
 inputDecorationPrimary({required String hintText}) {
   return InputDecoration(
     hintText: hintText,
+    hintStyle: AppTextStyles.normalBlackText14,
     border: const OutlineInputBorder(),
   );
 }

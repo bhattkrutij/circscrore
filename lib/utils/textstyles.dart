@@ -44,4 +44,9 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     color: textColorSecondary,
   );
+  static TextStyle normalBlackText14 = const TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.w100,
+    color: textColorPrimary,
+  );
 }

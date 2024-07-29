@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../utils/app_colors.dart';
+import '../utils/common.dart';
 import '../utils/textstyles.dart';
 import '../utils/widgets.dart';
 
@@ -32,14 +33,17 @@ class CreateTournamentView extends StatefulWidget {
 }
 
 class _CreateTournamentViewState extends State<CreateTournamentView> with Validator {
-  final TournamentFormCubit cubit = TournamentFormCubit();
   final _formKey = GlobalKey<FormState>();
+  late final TournamentFormCubit? cubit;
   String selectedType = typeT20;
+  DateTime? _startDate;
+  DateTime? _endDate;
   @override
   void initState() {
     super.initState();
-    context.read<TournamentFormCubit>().updateOvers("20");
-    context.read<TournamentFormCubit>().updateType(typeT20);
+    cubit = context.read<TournamentFormCubit>();
+    cubit!.updateOvers("20");
+    cubit!.updateType(typeT20);
   }
 
   @override
@@ -51,14 +55,15 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            BlocSelector<TournamentFormCubit, TournamentFormState, AutovalidateMode>(
-                bloc: cubit,
-                selector: (state) => state.autovalidateMode,
-                builder: (context, AutovalidateMode autovalidateMode) {
+            BlocSelector<TournamentFormCubit, TournamentFormState, bool>(
+                // bloc: cubit,
+                selector: (state) => state.isLoading,
+                builder: (context, isLoading) {
+                  print("====================isloading${isLoading}");
                   return Expanded(
                     child: Form(
                         key: _formKey,
-                        autovalidateMode: autovalidateMode,
+                        autovalidateMode: context.select((TournamentFormCubit cubit) => cubit.state.autovalidateMode),
                         child: Column(
                           children: [
                             TextFormField(
@@ -84,13 +89,13 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                                 });
                                 switch (value) {
                                   case typeTest:
-                                    cubit.updateOvers('50'); // Set default value for Test Match
+                                    cubit!.updateOvers('50'); // Set default value for Test Match
                                     break;
                                   case typeT20:
-                                    cubit.updateOvers('20'); // Set default value for T 20
+                                    cubit!.updateOvers('20'); // Set default value for T 20
                                     break;
                                   case typeLimitedOvers:
-                                    cubit.updateOvers(''); // Clear value for LimitedOvers
+                                    cubit!.updateOvers(''); // Clear value for LimitedOvers
                                     break;
                                 }
 
@@ -103,7 +108,7 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                               TextFormField(
                                   validator: validateOvers,
                                   onChanged: (value) {
-                                    context.read<TournamentFormCubit>().updateOvers(value);
+                                    cubit!.updateOvers(value);
                                   },
                                   cursorColor: primaryColor,
                                   keyboardType: TextInputType.text,
@@ -115,15 +120,19 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                               decoration: const InputDecoration(
                                   labelText: 'Start Date', suffixIcon: Icon(Icons.calendar_today)),
                               onTap: () async {
-                                DateTime? selectedDate = await showDatePicker(
+                                _startDate = await showDatePicker(
                                     context: context,
+                                    builder: (BuildContext context, Widget? child) {
+                                      return Theme(
+                                        data: commonAppThemeForCalender(),
+                                        child: child ?? Text(""),
+                                      );
+                                    },
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2101));
-                                if (selectedDate != null) {
-                                  context
-                                      .read<TournamentFormCubit>()
-                                      .updateStartDate(DateFormat.yMd().format(selectedDate));
+                                if (_startDate != null) {
+                                  cubit!.updateStartDate(DateFormat.yMd().format(_startDate!));
                                 }
                               },
                               controller: TextEditingController(
@@ -135,20 +144,26 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                             ),
                             sizedBox(height: 10),
                             TextFormField(
-                              validator: validateEndDate,
+                              validator: (value) {
+                                return validateEndDate(value, _startDate);
+                              },
                               readOnly: true,
                               decoration:
                                   const InputDecoration(labelText: 'End Date', suffixIcon: Icon(Icons.calendar_today)),
                               onTap: () async {
-                                DateTime? selectedDate = await showDatePicker(
+                                _endDate = await showDatePicker(
                                     context: context,
+                                    builder: (BuildContext context, Widget? child) {
+                                      return Theme(
+                                        data: commonAppThemeForCalender(),
+                                        child: child ?? Text(""),
+                                      );
+                                    },
                                     initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
+                                    firstDate: DateTime.now(),
                                     lastDate: DateTime(2101));
-                                if (selectedDate != null) {
-                                  context
-                                      .read<TournamentFormCubit>()
-                                      .updateEndDate(DateFormat.yMd().format(selectedDate));
+                                if (_endDate != null) {
+                                  cubit!.updateEndDate(DateFormat.yMd().format(_endDate!));
                                 }
                               },
                               controller: TextEditingController(
@@ -161,13 +176,15 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                               child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                    child: ElevatedAppButton(
-                                        title: "Create Tournament ",
-                                        onTap: () {
-                                          if (_formKey.currentState!.validate()) {
-                                            BlocProvider.of<TournamentFormCubit>(context).addTournament();
-                                          }
-                                        })),
+                                    child: isLoading
+                                        ? loaderWidget()
+                                        : ElevatedAppButton(
+                                            title: "Create Tournament ",
+                                            onTap: () {
+                                              if (_formKey.currentState!.validate()) {
+                                                cubit!.addTournament();
+                                              }
+                                            })),
                               ),
                             )
                           ],

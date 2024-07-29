@@ -47,6 +47,8 @@ class TournamentFormCubit extends Cubit<TournamentFormState> {
   }
 
   void addTournament() async {
+    emit(state.copyWith(isLoading: true));
+    await Future.delayed(Duration(seconds: 4));
     TournamentModel tournamentModel = TournamentModel(
         tournamentName: state.name,
         overs: state.overs,
@@ -55,5 +57,6 @@ class TournamentFormCubit extends Cubit<TournamentFormState> {
         endDate: state.endDate,
         imageUrl: '');
     tournamentService.addTournament(tournamentModel);
+    emit(state.copyWith(isLoading: false));
   }
 }

@@ -8,14 +8,17 @@ class TournamentFormState {
   final String startDate;
   final String endDate;
   final String overs;
+  final bool isLoading;
 
-  const TournamentFormState(
-      {this.autovalidateMode = AutovalidateMode.disabled,
-      this.name = "",
-      this.type = "",
-      this.endDate = "",
-      this.startDate = "",
-      this.overs = ""});
+  const TournamentFormState({
+    this.autovalidateMode = AutovalidateMode.disabled,
+    this.name = "",
+    this.type = "",
+    this.endDate = "",
+    this.startDate = "",
+    this.overs = "",
+    this.isLoading = false,
+  });
   TournamentFormState copyWith({
     String? name,
     String? type,
@@ -23,6 +26,7 @@ class TournamentFormState {
     String? startDate,
     String? overs,
     AutovalidateMode? autovalidateMode,
+    bool? isLoading,
   }) {
     return TournamentFormState(
       name: name ?? this.name,
@@ -31,6 +35,7 @@ class TournamentFormState {
       startDate: startDate ?? this.startDate,
       overs: overs ?? this.overs,
       autovalidateMode: autovalidateMode ?? this.autovalidateMode,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

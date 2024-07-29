@@ -8,10 +8,8 @@ import 'app_colors.dart';
 import 'diamentions.dart';
 
 loaderWidget() {
-  return const Center(
-    child: CircularProgressIndicator(
-      color: primaryColor,
-    ),
+  return CircularProgressIndicator(
+    color: primaryColor,
   );
 }
 

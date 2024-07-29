@@ -1,3 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+import 'cubits/tournament_cubit/tournament_form_cubit.dart';
+
 mixin Validator {
 // tournament name
   String? validateName(String? value) {
@@ -25,15 +31,24 @@ mixin Validator {
 
   String? validateStartDate(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Tournament type is required';
+      return 'Tournament start date is required';
     }
     return null;
   }
 
-  String? validateEndDate(String? value) {
+  String? validateEndDate(String? value, DateTime? startDate) {
     if (value == null || value.isEmpty) {
-      return 'Tournament type is required';
+      return 'Tournament end date is required';
     }
+
+    // Convert end date from string to DateTime
+    DateTime endDate = DateFormat.yMd().parse(value);
+
+    // Check if end date is after the start date
+    if (startDate != null && endDate.isBefore(startDate)) {
+      return 'End date must be after the start date';
+    }
+
     return null;
   }
 

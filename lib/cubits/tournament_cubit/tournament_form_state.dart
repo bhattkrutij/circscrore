@@ -3,29 +3,33 @@ part of 'tournament_form_cubit.dart';
 @immutable
 class TournamentFormState {
   final AutovalidateMode autovalidateMode;
-  final String tournamentName;
-  final String tournamentType;
-  final String tournamentStartDate;
-  final String tournamentEndDate;
+  final String name;
+  final String type;
+  final String startDate;
+  final String endDate;
+  final String overs;
 
   const TournamentFormState(
       {this.autovalidateMode = AutovalidateMode.disabled,
-      this.tournamentName = "",
-      this.tournamentType = "",
-      this.tournamentEndDate = "",
-      this.tournamentStartDate = ""});
+      this.name = "",
+      this.type = "",
+      this.endDate = "",
+      this.startDate = "",
+      this.overs = ""});
   TournamentFormState copyWith({
     String? name,
     String? type,
     String? endDate,
     String? startDate,
+    String? overs,
     AutovalidateMode? autovalidateMode,
   }) {
     return TournamentFormState(
-      tournamentName: name ?? this.tournamentName,
-      tournamentType: type ?? this.tournamentType,
-      tournamentEndDate: endDate ?? this.tournamentEndDate,
-      tournamentStartDate: startDate ?? this.tournamentStartDate,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      endDate: endDate ?? this.endDate,
+      startDate: startDate ?? this.startDate,
+      overs: overs ?? this.overs,
       autovalidateMode: autovalidateMode ?? this.autovalidateMode,
     );
   }

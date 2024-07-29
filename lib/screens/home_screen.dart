@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: primaryColor,
             onPressed: () {
               if (index == 0) {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CreateTorunament()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CreateTournament()));
               }
               // Do something ...
             },

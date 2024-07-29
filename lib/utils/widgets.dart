@@ -38,11 +38,12 @@ primaryButtonStyle() {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(4), side: borderSidePrimary())));
 }
 
-inputDecorationPrimary({required String hintText}) {
+inputDecorationPrimary({required String hintText, Icon? icon}) {
   return InputDecoration(
     hintText: hintText,
-    hintStyle: AppTextStyles.normalBlackText14,
+    hintStyle: AppTextStyles.normalSecondaryText14,
     border: const OutlineInputBorder(),
+    suffix: icon ?? const SizedBox(),
   );
 }
 

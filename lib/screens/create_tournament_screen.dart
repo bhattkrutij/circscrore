@@ -1,4 +1,5 @@
 import 'package:circ_scrorer/cubits/tournament_cubit/tournament_form_cubit.dart';
+import 'package:circ_scrorer/utils/app_constants.dart';
 import 'package:circ_scrorer/utils/custom_app_button.dart';
 import 'package:circ_scrorer/utils/diamentions.dart';
 import 'package:circ_scrorer/validators.dart';
@@ -11,8 +12,8 @@ import '../utils/app_colors.dart';
 import '../utils/textstyles.dart';
 import '../utils/widgets.dart';
 
-class CreateTorunament extends StatelessWidget {
-  const CreateTorunament({Key? key}) : super(key: key);
+class CreateTournament extends StatelessWidget {
+  const CreateTournament({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +33,19 @@ class CreateTournamentView extends StatefulWidget {
 
 class _CreateTournamentViewState extends State<CreateTournamentView> with Validator {
   final TournamentFormCubit cubit = TournamentFormCubit();
-
   final _formKey = GlobalKey<FormState>();
+  String selectedType = typeT20;
+  @override
+  void initState() {
+    super.initState();
+    context.read<TournamentFormCubit>().updateOvers("20");
+    context.read<TournamentFormCubit>().updateType(typeT20);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Create Tournament', style: AppTextStyles.normalBlack18),
-      ),
+      appBar: AppBar(title: Text('Create Tournament', style: AppTextStyles.normalBlack18)),
       body: Padding(
         padding: const EdgeInsets.all(Dimensions.padding10),
         child: Column(
@@ -56,40 +62,64 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                         child: Column(
                           children: [
                             TextFormField(
-                              validator: validateName,
-                              onChanged: cubit.updateName,
-                              cursorColor: primaryColor,
-                              keyboardType: TextInputType.text,
-                              decoration: inputDecorationPrimary(hintText: "Name"),
-                            ),
-                            sizedBox(height: 10),
+                                validator: validateName,
+                                onChanged: (value) => context.read<TournamentFormCubit>().updateName(value),
+                                cursorColor: primaryColor,
+                                keyboardType: TextInputType.text,
+                                decoration: inputDecorationPrimary(hintText: "Name")),
+                            sizedBox(height: Dimensions.height10),
                             DropdownButtonFormField<String>(
-                              decoration: InputDecoration(labelText: 'Tournament Type'),
-                              items: ['Test Match', 'LimitedOvers', 'T 20'].map((type) {
+                              autovalidateMode: AutovalidateMode.always,
+                              decoration: InputDecoration(hintText: 'Tournament Type'),
+                              items: [typeTest, typeT20, typeLimitedOvers].map((type) {
                                 return DropdownMenuItem<String>(
                                   value: type,
-                                  child: Text(
-                                    type,
-                                    style: AppTextStyles.normalBlack16,
-                                  ),
+                                  child: Text(type, style: AppTextStyles.normalBlack16),
                                 );
                               }).toList(),
-                              onChanged: (value) => context.read<TournamentFormCubit>().updateType(value!),
+                              value: selectedType,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedType = value!;
+                                });
+                                switch (value) {
+                                  case typeTest:
+                                    cubit.updateOvers('50'); // Set default value for Test Match
+                                    break;
+                                  case typeT20:
+                                    cubit.updateOvers('20'); // Set default value for T 20
+                                    break;
+                                  case typeLimitedOvers:
+                                    cubit.updateOvers(''); // Clear value for LimitedOvers
+                                    break;
+                                }
+
+                                context.read<TournamentFormCubit>().updateType(value);
+                              },
+                              validator: validateType,
                             ),
                             sizedBox(height: 10),
+                            if (selectedType == typeLimitedOvers)
+                              TextFormField(
+                                  validator: validateOvers,
+                                  onChanged: (value) {
+                                    context.read<TournamentFormCubit>().updateOvers(value);
+                                  },
+                                  cursorColor: primaryColor,
+                                  keyboardType: TextInputType.text,
+                                  decoration: inputDecorationPrimary(hintText: "Overs")),
+                            sizedBox(height: 10),
                             TextFormField(
+                              validator: validateStartDate,
                               readOnly: true,
                               decoration: const InputDecoration(
-                                labelText: 'Start Date',
-                                suffixIcon: Icon(Icons.calendar_today),
-                              ),
+                                  labelText: 'Start Date', suffixIcon: Icon(Icons.calendar_today)),
                               onTap: () async {
                                 DateTime? selectedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2101),
-                                );
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101));
                                 if (selectedDate != null) {
                                   context
                                       .read<TournamentFormCubit>()
@@ -99,24 +129,22 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                               controller: TextEditingController(
                                 text: context.select(
                                   (TournamentFormCubit cubit) =>
-                                      cubit.state.tournamentStartDate.isEmpty ? '' : cubit.state.tournamentStartDate,
+                                      cubit.state.startDate.isEmpty ? '' : cubit.state.startDate,
                                 ),
                               ),
                             ),
                             sizedBox(height: 10),
                             TextFormField(
+                              validator: validateEndDate,
                               readOnly: true,
-                              decoration: const InputDecoration(
-                                labelText: 'End Date',
-                                suffixIcon: Icon(Icons.calendar_today),
-                              ),
+                              decoration:
+                                  const InputDecoration(labelText: 'End Date', suffixIcon: Icon(Icons.calendar_today)),
                               onTap: () async {
                                 DateTime? selectedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2101),
-                                );
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101));
                                 if (selectedDate != null) {
                                   context
                                       .read<TournamentFormCubit>()
@@ -124,17 +152,22 @@ class _CreateTournamentViewState extends State<CreateTournamentView> with Valida
                                 }
                               },
                               controller: TextEditingController(
-                                text: context.select(
-                                  (TournamentFormCubit cubit) =>
-                                      cubit.state.tournamentEndDate.isEmpty ? '' : cubit.state.tournamentEndDate,
-                                ),
+                                text: context.select((TournamentFormCubit cubit) =>
+                                    cubit.state.endDate.isEmpty ? '' : cubit.state.endDate),
                               ),
                             ),
                             sizedBox(height: 10),
                             Expanded(
                               child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: Container(child: ElevatedAppButton(title: "Create Tournament ", onTap: () {})),
+                                child: Container(
+                                    child: ElevatedAppButton(
+                                        title: "Create Tournament ",
+                                        onTap: () {
+                                          if (_formKey.currentState!.validate()) {
+                                            BlocProvider.of<TournamentFormCubit>(context).addTournament();
+                                          }
+                                        })),
                               ),
                             )
                           ],

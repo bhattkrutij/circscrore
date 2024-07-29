@@ -7,6 +7,14 @@ mixin Validator {
     return null;
   }
 
+  // tournament name
+  String? validateOvers(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Tournament overs   required';
+    }
+    return null;
+  }
+
   // tournament type
   String? validateType(String? value) {
     if (value == null || value.isEmpty) {

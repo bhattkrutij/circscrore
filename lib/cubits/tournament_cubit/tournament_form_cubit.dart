@@ -1,4 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:circ_scrorer/models/tournament_model.dart';
+import 'package:circ_scrorer/services/tournament_Service.dart';
+import 'package:circ_scrorer/utils/app_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -6,26 +9,28 @@ import 'package:meta/meta.dart';
 part 'tournament_form_state.dart';
 
 class TournamentFormCubit extends Cubit<TournamentFormState> {
+  final TournamentService tournamentService = TournamentService();
   TournamentFormCubit() : super(TournamentFormInitial());
   void initForm({
     String name = '',
-    String type = '',
+    String type = typeT20,
+    String overs = '20',
     String startDate = '',
     String endDate = '',
   }) {
-    emit(state.copyWith(
-      name: name,
-      type: type,
-      startDate: startDate,
-      endDate: endDate,
-    ));
+    emit(state.copyWith(name: name, type: type, startDate: startDate, endDate: endDate, overs: overs));
   }
 
   void updateName(String? tournamentName) {
     emit(state.copyWith(name: tournamentName));
   }
 
+  void updateOvers(String? tournamentOvers) {
+    emit(state.copyWith(overs: tournamentOvers));
+  }
+
   void updateType(String? tournamentType) {
+    print("===============update type${tournamentType}");
     emit(state.copyWith(type: tournamentType));
   }
 
@@ -41,7 +46,14 @@ class TournamentFormCubit extends Cubit<TournamentFormState> {
     emit(state.copyWith(autovalidateMode: autovalidateMode));
   }
 
-  // void reset() {
-  //   emit(const FormValidatorUpdate());
-  // }
+  void addTournament() async {
+    TournamentModel tournamentModel = TournamentModel(
+        tournamentName: state.name,
+        overs: state.overs,
+        startDate: state.startDate,
+        type: state.type,
+        endDate: state.endDate,
+        imageUrl: '');
+    tournamentService.addTournament(tournamentModel);
+  }
 }

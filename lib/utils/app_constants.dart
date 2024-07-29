@@ -5,3 +5,6 @@ const firebaseProjectId = "cricscrorer";
 const firebaseStorageBucket = "cricscrorer.appspot.com";
 const phoneNumberMaxLength = 10;
 const countryCode = "+91";
+const typeT20 = "T 20";
+const typeTest = "Test Match";
+const typeLimitedOvers = "Limited Overs";

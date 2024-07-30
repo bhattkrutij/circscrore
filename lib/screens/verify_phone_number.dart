@@ -63,7 +63,11 @@ class VerifyPhoneNumber extends StatelessWidget {
                         return ElevatedAppButton(
                           title: verify,
                           onTap: () {
-                            BlocProvider.of<AuthCubit>(context).verifyOTP(optController.text);
+                            if (optController.text.isNotEmpty) {
+                              BlocProvider.of<AuthCubit>(context).verifyOTP(optController.text);
+                            } else {
+                              toast("otp field is empty");
+                            }
                           },
                         );
                       },

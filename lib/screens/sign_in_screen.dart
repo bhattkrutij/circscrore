@@ -1,3 +1,4 @@
+import 'package:circ_scrorer/screens/register_screen.dart';
 import 'package:circ_scrorer/screens/verify_phone_number.dart';
 import 'package:circ_scrorer/utils/widgets.dart';
 import 'package:circ_scrorer/utils/app_colors.dart';
@@ -49,6 +50,18 @@ class SignInScreen extends StatelessWidget {
                     const SizedBox(height: Dimensions.height30),
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
+                        if (state is AuthErrorState) {
+                          toast(state.error);
+                        }
+                        print("-----------auth state${state}");
+                        if (state is AuthCompleteUserProfileState) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterScreen(user: state.firebaseUser),
+                            ),
+                          );
+                        }
                         if (state is AuthCodeSentState) {
                           Navigator.push(
                             context,
@@ -66,7 +79,11 @@ class SignInScreen extends StatelessWidget {
                           title: signInButtonText,
                           onTap: () {
                             String phoneNumber = "$countryCode${phoneController.text}";
-                            BlocProvider.of<AuthCubit>(context).sendOTP(phoneNumber);
+                            if (phoneController.text.isNotEmpty) {
+                              BlocProvider.of<AuthCubit>(context).sendOTP(phoneNumber);
+                            } else {
+                              toast("invalid phone number");
+                            }
                           },
                         );
                       },

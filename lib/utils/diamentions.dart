@@ -20,7 +20,8 @@ class Dimensions {
   static const double width50 = 50;
   static const double width60 = 60;
   static const double width40 = 40;
-  static const double width10 = 10; // Full width
+  static const double width10 = 10;
+  static const double width100 = 100; // Full width
 // Full width
 
   // Padding

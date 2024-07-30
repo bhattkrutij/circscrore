@@ -13,6 +13,11 @@ class AuthLoggedInState extends AuthState {
   AuthLoggedInState(this.firebaseUser);
 }
 
+class AuthCompleteUserProfileState extends AuthState {
+  final User firebaseUser;
+  AuthCompleteUserProfileState(this.firebaseUser);
+}
+
 class AuthLoggedOutState extends AuthState {}
 
 class AuthErrorState extends AuthState {

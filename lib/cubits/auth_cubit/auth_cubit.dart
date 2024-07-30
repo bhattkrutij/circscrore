@@ -1,4 +1,5 @@
 import 'package:circ_scrorer/utils/keys.dart';
+import 'package:circ_scrorer/utils/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../services/user_service.dart';
@@ -49,13 +50,22 @@ class AuthCubit extends Cubit<AuthState> {
       UserCredential userCredential = await _firebaseAuth.signInWithCredential(credential);
       final User? user = userCredential.user;
       if (user != null) {
-        UserModel userModel = UserModel();
-        userModel.uid = user.uid;
-        userModel.phoneNumber = user.phoneNumber;
-        await userService.addUser(userModel.toJson());
-        setValue(currentUser, userModel.toJson());
-        setValue(isUserLoggedIn, true);
-        emit(AuthLoggedInState(userCredential.user!));
+        await userService.isUserExist(user.phoneNumber).then((value) async {
+          if (value) {
+            await userService.getUserByPhoneNumber(phoneNumber: user.phoneNumber).then((value) {
+              setValue(currentUser, value.toJson());
+              setValue(isUserLoggedIn, true);
+              emit(AuthLoggedInState(userCredential.user!));
+            });
+          } else {
+            UserModel userModel = UserModel();
+            userModel.uid = user.uid;
+            userModel.phoneNumber = user.phoneNumber;
+            await userService.addUser(userModel.toJson());
+            emit(AuthCompleteUserProfileState(userCredential.user!));
+            toast("new user registration");
+          }
+        });
       }
     } on FirebaseAuthException catch (ex) {
       emit(AuthErrorState(ex.message.toString()));
@@ -63,7 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void logOut() async {
-    emit(AuthLoggedOutState());
     _firebaseAuth.signOut();
+    emit(AuthLoggedOutState());
   }
 }

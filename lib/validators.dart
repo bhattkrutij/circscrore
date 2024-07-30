@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import 'cubits/tournament_cubit/tournament_form_cubit.dart';
-
 mixin Validator {
+  final emailRegEx = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
 // tournament name
   String? validateName(String? value) {
     if (value == null || value.isEmpty) {
@@ -102,6 +99,20 @@ mixin Validator {
   String? validateCity(String? value) {
     if (value == null || value.isEmpty) {
       return 'City is required';
+    }
+    return null;
+  }
+
+  String? validateGender(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Select gender';
+    }
+    return null;
+  }
+
+  String? validateBirthDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter Birthdate';
     }
     return null;
   }

@@ -31,9 +31,9 @@ borderSidePrimary() {
   return const BorderSide(width: 1, color: primaryColor);
 }
 
-primaryButtonStyle() {
+primaryButtonStyle({Color? bgColor}) {
   return ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(buttonBgColor),
+      backgroundColor: MaterialStateProperty.all(bgColor ?? buttonBgColor),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(4), side: borderSidePrimary())));
 }

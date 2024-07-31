@@ -1,15 +1,22 @@
 import 'package:circ_scrorer/cubits/auth_cubit/auth_state.dart';
 import 'package:circ_scrorer/cubits/sign_up/register_cubit.dart';
 import 'package:circ_scrorer/cubits/sign_up/register_state.dart';
+import 'package:circ_scrorer/utils/app_colors.dart';
 import 'package:circ_scrorer/utils/custom_app_button.dart';
+import 'package:circ_scrorer/utils/diamentions.dart';
 import 'package:circ_scrorer/utils/widgets.dart';
 import 'package:circ_scrorer/validators.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../utils/app_constants.dart';
+import '../utils/app_strings.dart';
+import '../utils/common.dart';
 import '../utils/textstyles.dart';
 import 'home_screen.dart';
 
@@ -26,7 +33,7 @@ class RegisterScreen extends StatelessWidget with Validator {
       create: (_) => RegisterCubit(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Onboarding'),
+          title: const Text(completeProfile),
         ),
         body: BlocListener<RegisterCubit, RegisterState>(
           listener: (context, state) {
@@ -45,9 +52,11 @@ class RegisterScreen extends StatelessWidget with Validator {
           },
           child: BlocBuilder<RegisterCubit, RegisterState>(
             builder: (context, state) {
-              return Column(
+              return Stack(
                 children: [
-                  Expanded(
+                  Container(
+                    width: Dimensions.width,
+                    // color: Colors.red,
                     child: IndexedStack(
                       index: state.currentStep,
                       children: [
@@ -59,28 +68,54 @@ class RegisterScreen extends StatelessWidget with Validator {
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (state.currentStep > 0)
-                        ElevatedAppButton(
-                          title: 'Previous',
-                          onTap: () => context.read<RegisterCubit>().previousStep(),
-                        ),
-                      ElevatedButton(
-                        onPressed: () {
-                          print("===========step${state.currentStep}");
-                          if (_formKeys[state.currentStep].currentState!.validate()) {
-                            if (state.currentStep == 4) {
-                              context.read<RegisterCubit>().updatePlayerDetails(user: user);
-                            } else {
-                              context.read<RegisterCubit>().nextStep();
-                            }
-                          }
-                        },
-                        child: Text(state.currentStep == 4 ? 'Finish' : 'Next'),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: Dimensions.width,
+                      height: 100,
+                      // color: Colors.pink,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                              left: 10,
+                              bottom: 10,
+                              child: SizedBox(
+                                width: 200,
+                                height: 50,
+                                // color: Colors.red,
+                                child: ElevatedAppButton(
+                                    title: previous,
+                                    onTap: () {
+                                      if (state.currentStep > 0) {
+                                        context.read<RegisterCubit>().previousStep();
+                                      }
+                                    },
+                                    bgColor: state.currentStep > 0 ? primaryColor : Colors.grey),
+                              )),
+                          Positioned(
+                            right: 10,
+                            bottom: 10,
+                            child: Container(
+                              width: 200,
+                              height: 50,
+                              //  color: Colors.blue,
+                              child: ElevatedAppButton(
+                                  title: state.currentStep == 4 ? finish : next,
+                                  onTap: () {
+                                    print("===========step${state.currentStep}");
+                                    if (_formKeys[state.currentStep].currentState!.validate()) {
+                                      if (state.currentStep == 4) {
+                                        context.read<RegisterCubit>().updatePlayerDetails(user: user);
+                                      } else {
+                                        context.read<RegisterCubit>().nextStep();
+                                      }
+                                    }
+                                  }),
+                            ),
+                          )
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ],
               );
@@ -131,8 +166,14 @@ class _BirthdayForm extends StatelessWidget with Validator {
           onTap: () async {
             DateTime? picked = await showDatePicker(
               context: context,
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: commonAppThemeForCalender(),
+                  child: child ?? Text(""),
+                );
+              },
               initialDate: DateTime.now(),
-              firstDate: DateTime(2023),
+              firstDate: DateTime(1960),
               lastDate: DateTime.now(),
             );
             if (picked != null) {

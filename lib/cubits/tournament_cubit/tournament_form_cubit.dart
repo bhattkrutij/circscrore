@@ -14,7 +14,7 @@ class TournamentFormCubit extends Cubit<TournamentFormState> {
   void initForm({
     String name = '',
     String type = typeT20,
-    String overs = '20',
+    String overs = twentyOvers,
     String startDate = '',
     String endDate = '',
   }) {

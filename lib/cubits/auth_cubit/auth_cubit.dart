@@ -10,7 +10,7 @@ import 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final UserService userService = UserService();
-  AuthCubit() : super(AuthInitianState());
+  AuthCubit() : super(AuthInitialState());
 
   String? verificationID;
 

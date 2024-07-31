@@ -1,3 +1,7 @@
+import 'package:flutter/services.dart';
+
+import '../utils/keys.dart';
+
 class UserModel {
   String? uid;
   String? phoneNumber;
@@ -18,24 +22,24 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      uid: json['uid'],
-      phoneNumber: json['phoneNumber'],
-      name: json['name'],
-      gender: json['gender'],
-      email: json['email'],
-      birthDate: json['birthDate'],
-      city: json['city'],
+      uid: json[keyUid],
+      phoneNumber: json[keyPhoneNumber],
+      name: json[keyPhoneNumber],
+      gender: json[keyGender],
+      email: json[keyEmail],
+      birthDate: json[keyBirthDate],
+      city: json[keyCity],
     );
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['uid'] = uid;
-    data['phoneNumber'] = phoneNumber;
-    data['name'] = name;
-    data['gender'] = gender;
-    data['email'] = email;
-    data['birthDate'] = birthDate;
-    data['city'] = city;
+    data[keyUid] = uid;
+    data[keyPhoneNumber] = phoneNumber;
+    data[keyName] = name;
+    data[keyGender] = gender;
+    data[keyEmail] = email;
+    data[keyBirthDate] = birthDate;
+    data[keyCity] = city;
     return data;
   }
 }

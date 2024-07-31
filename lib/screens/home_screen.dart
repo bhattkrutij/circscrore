@@ -152,10 +152,10 @@ List<BottomNavigationBarItem> bottomBarItems() {
       icon: Image.asset(ic_team, color: Colors.grey, width: 24, height: 24, fit: BoxFit.cover),
       backgroundColor: whiteColor,
     ),
-    BottomNavigationBarItem(
+    const BottomNavigationBarItem(
         activeIcon: Icon(Icons.settings, color: primaryColor),
         label: settings,
-        icon: const Icon(Icons.settings, color: Colors.grey),
+        icon: Icon(Icons.settings, color: Colors.grey),
         backgroundColor: whiteColor),
   ];
 }

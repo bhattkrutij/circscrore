@@ -7,11 +7,8 @@ import 'diamentions.dart';
 class ElevatedAppButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
-  const ElevatedAppButton({
-    super.key,
-    required this.title,
-    required this.onTap,
-  });
+  Color? bgColor;
+  ElevatedAppButton({super.key, required this.title, required this.onTap, this.bgColor});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +17,7 @@ class ElevatedAppButton extends StatelessWidget {
       height: Dimensions.appButtonHeight,
       child: ElevatedButton(
         onPressed: onTap,
-        style: primaryButtonStyle(),
+        style: primaryButtonStyle(bgColor: bgColor),
         child: Text(
           title,
           style: const TextStyle(color: buttonTextColor),

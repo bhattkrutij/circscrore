@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: BlocBuilder<AuthCubit, AuthState>(
           buildWhen: (previous, current) {
-            return previous is AuthInitianState;
+            return previous is AuthInitialState;
           },
           builder: (context, state) {
             if (state is AuthLoggedInState) {

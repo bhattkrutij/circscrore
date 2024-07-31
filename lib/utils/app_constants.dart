@@ -10,4 +10,7 @@ const countryCode = "+91";
 const typeT20 = "T 20";
 const typeTest = "Test Match";
 const typeLimitedOvers = "Limited Overs";
+const String twentyOvers = "20";
+const String fiftyOvers = "50";
+
 var dateFormatYYYYMMDD = DateFormat('yyyy-MM-dd');

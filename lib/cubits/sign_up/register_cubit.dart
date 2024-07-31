@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:circ_scrorer/models/user_model.dart';
-import 'package:circ_scrorer/services/tournament_Service.dart';
 import 'package:circ_scrorer/services/user_service.dart';
-import 'package:circ_scrorer/utils/shared_pref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../utils/app_strings.dart';
 import 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
@@ -13,7 +12,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   void initForm({
     String name = '',
     String birthdate = '',
-    String gender = 'Male',
+    String gender = male,
     String email = '',
     String city = '',
   }) {
@@ -49,9 +48,9 @@ class RegisterCubit extends Cubit<RegisterState> {
     userModel.birthDate = state.birthday;
     userService.updateUserData(phoneNumber: user.phoneNumber.toString(), userModel: userModel).then((value) {
       if (value) {
-        emit(RegisterationCompletedState("Registration completed successfully"));
+        emit(RegisterationCompletedState(registrationComfirmMsg));
       } else {
-        emit(ErrorState("something went wrong"));
+        emit(ErrorState(somethingWentWrong));
       }
     });
   }

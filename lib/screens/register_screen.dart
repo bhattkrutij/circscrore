@@ -1,4 +1,3 @@
-import 'package:circ_scrorer/cubits/auth_cubit/auth_state.dart';
 import 'package:circ_scrorer/cubits/sign_up/register_cubit.dart';
 import 'package:circ_scrorer/cubits/sign_up/register_state.dart';
 import 'package:circ_scrorer/utils/app_colors.dart';
@@ -72,16 +71,16 @@ class RegisterScreen extends StatelessWidget with Validator {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       width: Dimensions.width,
-                      height: 100,
+                      height: Dimensions.height100,
                       // color: Colors.pink,
                       child: Stack(
                         children: [
                           Positioned(
-                              left: 10,
-                              bottom: 10,
+                              left: Dimensions.height10,
+                              bottom: Dimensions.height10,
                               child: SizedBox(
-                                width: 200,
-                                height: 50,
+                                width: Dimensions.width100,
+                                height: Dimensions.height50,
                                 // color: Colors.red,
                                 child: ElevatedAppButton(
                                     title: previous,
@@ -93,11 +92,11 @@ class RegisterScreen extends StatelessWidget with Validator {
                                     bgColor: state.currentStep > 0 ? primaryColor : Colors.grey),
                               )),
                           Positioned(
-                            right: 10,
-                            bottom: 10,
+                            right: Dimensions.height10,
+                            bottom: Dimensions.height10,
                             child: Container(
-                              width: 200,
-                              height: 50,
+                              width: Dimensions.width100,
+                              height: Dimensions.height50,
                               //  color: Colors.blue,
                               child: ElevatedAppButton(
                                   title: state.currentStep == 4 ? finish : next,
@@ -138,7 +137,7 @@ class _NameForm extends StatelessWidget with Validator {
       child: Form(
         key: formKey,
         child: TextFormField(
-          decoration: const InputDecoration(labelText: 'Name'),
+          decoration: const InputDecoration(labelText: name),
           validator: validateName,
           onChanged: (value) => context.read<RegisterCubit>().updateName(value),
         ),
@@ -160,7 +159,7 @@ class _BirthdayForm extends StatelessWidget with Validator {
         key: formKey,
         child: TextFormField(
           controller: controller,
-          decoration: const InputDecoration(labelText: 'Birthday'),
+          decoration: const InputDecoration(labelText: birthDate),
           validator: validateBirthDate,
           //   validator: (value) => validateBirthDate((value != null ? DateTime.tryParse(value) : null) as String?),
           onTap: () async {
@@ -177,7 +176,7 @@ class _BirthdayForm extends StatelessWidget with Validator {
               lastDate: DateTime.now(),
             );
             if (picked != null) {
-              controller.text = DateFormat('yyyy-MM-dd').format(picked); // Format date as yyyy-MM-dd
+              controller.text = dateFormatYYYYMMDD.format(picked); // Format date as yyyy-MM-dd
               context.read<RegisterCubit>().updateBirthday(dateFormatYYYYMMDD.format(picked));
             }
           },
@@ -197,6 +196,104 @@ class _GenderForm extends StatefulWidget {
 }
 
 class _GenderFormState extends State<_GenderForm> with Validator {
+  String? selectedValue;
+  late final RegisterCubit? cubit;
+  @override
+  void initState() {
+    super.initState();
+    cubit = context.read<RegisterCubit>();
+    cubit!.updateGender(male);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: widget.formKey,
+        child: DropdownButtonFormField<String>(
+          autovalidateMode: AutovalidateMode.always,
+          decoration: InputDecoration(hintText: gender),
+          items: [male, female, others].map((type) {
+            return DropdownMenuItem<String>(
+              value: type,
+              child: Text(type, style: AppTextStyles.normalBlack16),
+            );
+          }).toList(),
+          value: selectedValue,
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value!;
+            });
+            switch (value) {
+              case male:
+                cubit!.updateGender(male); // Set default value for Test Match
+                break;
+              case female:
+                cubit!.updateGender(female); // Set default value for T 20
+                break;
+              case others:
+                cubit!.updateGender(others); // Clear value for LimitedOvers
+                break;
+            }
+
+            cubit!.updateGender(value!);
+          },
+          validator: validateGender,
+        ),
+      ),
+    );
+  }
+}
+
+class _EmailForm extends StatelessWidget with Validator {
+  final GlobalKey<FormState> formKey;
+  _EmailForm({required this.formKey});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: formKey,
+        child: TextFormField(
+          decoration: const InputDecoration(labelText: email),
+          validator: validateEmail,
+          onChanged: (value) => context.read<RegisterCubit>().updateEmail(value),
+        ),
+      ),
+    );
+  }
+}
+
+class _CityForm extends StatelessWidget with Validator {
+  final GlobalKey<FormState> formKey;
+  _CityForm({required this.formKey});
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Form(
+        key: formKey,
+        child: TextFormField(
+          decoration: const InputDecoration(labelText: city),
+          validator: validateCity,
+          onChanged: (value) => context.read<RegisterCubit>().updateCity(value),
+        ),
+      ),
+    );
+  }
+}
+
+class _RoleForm extends StatefulWidget {
+  final GlobalKey<FormState> formKey;
+
+  _RoleForm({required this.formKey});
+
+  @override
+  State<_GenderForm> createState() => _GenderFormState();
+}
+
+class _RoleFormState extends State<_GenderForm> with Validator {
   String? selectedValue;
   late final RegisterCubit? cubit;
   @override
@@ -241,44 +338,6 @@ class _GenderFormState extends State<_GenderForm> with Validator {
             cubit!.updateGender(value!);
           },
           validator: validateGender,
-        ),
-      ),
-    );
-  }
-}
-
-class _EmailForm extends StatelessWidget with Validator {
-  final GlobalKey<FormState> formKey;
-  _EmailForm({required this.formKey});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: formKey,
-        child: TextFormField(
-          decoration: const InputDecoration(labelText: 'Email'),
-          validator: validateEmail,
-          onChanged: (value) => context.read<RegisterCubit>().updateEmail(value),
-        ),
-      ),
-    );
-  }
-}
-
-class _CityForm extends StatelessWidget with Validator {
-  final GlobalKey<FormState> formKey;
-  _CityForm({required this.formKey});
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: formKey,
-        child: TextFormField(
-          decoration: const InputDecoration(labelText: 'City'),
-          validator: validateCity,
-          onChanged: (value) => context.read<RegisterCubit>().updateCity(value),
         ),
       ),
     );

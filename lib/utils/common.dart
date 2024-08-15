@@ -12,10 +12,10 @@ commonAppThemeForCalender() {
     buttonTheme: ButtonThemeData(
       textTheme: ButtonTextTheme.primary, // Ensures button text color is readable
     ),
-    textTheme: TextTheme(
-      headline6: TextStyle(color: Colors.black), // Calendar header text
-      bodyText2: TextStyle(color: Colors.black), // Day text
-    ),
+    // textTheme: TextTheme(
+    //   headline6: TextStyle(color: Colors.black), // Calendar header text
+    //   bodyText2: TextStyle(color: Colors.black), // Day text
+    // ),
     colorScheme: const ColorScheme.light(
       primary: Color(0xFF4CAF50), // Primary color for the calendar header
       onPrimary: Colors.white, // Text color on primary color

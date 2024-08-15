@@ -1,4 +1,5 @@
 import 'package:circ_scrorer/screens/create_tournament_screen.dart';
+import 'package:circ_scrorer/screens/ground.dart';
 import 'package:circ_scrorer/screens/match_list_screen.dart';
 import 'package:circ_scrorer/screens/settings_screen.dart';
 import 'package:circ_scrorer/screens/sign_in_screen.dart';
@@ -63,6 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               if (index == 0) {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CreateTournament()));
+              }
+              if (index == 1) {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Ground()));
               }
               // Do something ...
             },

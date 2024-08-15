@@ -21,7 +21,8 @@ class Dimensions {
   static const double width60 = 60;
   static const double width40 = 40;
   static const double width10 = 10;
-  static const double width100 = 100; // Full width
+  static const double width100 = 100;
+  // Standard pitch ratio// Full width
 // Full width
 
   // Padding

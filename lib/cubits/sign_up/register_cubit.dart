@@ -9,13 +9,15 @@ import 'register_state.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   UserService userService = UserService();
   RegisterCubit() : super(RegisterStateInitial());
-  void initForm({
-    String name = '',
-    String birthdate = '',
-    String gender = male,
-    String email = '',
-    String city = '',
-  }) {
+  void initForm(
+      {String name = '',
+      String birthdate = '',
+      String gender = male,
+      String email = '',
+      String city = '',
+      String role = '',
+      String battingStyle = battingStyleLeftHand,
+      String bowlingStyle = bowlerStyleRightArmFast}) {
     emit(state.copyWith(name: name, birthday: birthdate, gender: gender, email: email, city: city));
   }
 
@@ -24,6 +26,9 @@ class RegisterCubit extends Cubit<RegisterState> {
   void updateGender(String gender) => emit(state.copyWith(gender: gender));
   void updateEmail(String email) => emit(state.copyWith(email: email));
   void updateCity(String city) => emit(state.copyWith(city: city));
+  void updateRole(String role) => emit(state.copyWith(role: role));
+  void updateBattingStyle(String battingStyle) => emit(state.copyWith(role: battingStyle));
+  void updateBowlingStyle(String bowlingStyle) => emit(state.copyWith(role: bowlingStyle));
 
   void nextStep() {
     if (state.currentStep < 4) {
@@ -46,7 +51,9 @@ class RegisterCubit extends Cubit<RegisterState> {
     userModel.email = state.email;
     userModel.name = state.name;
     userModel.birthDate = state.birthday;
-    userService.updateUserData(phoneNumber: user.phoneNumber.toString(), userModel: userModel).then((value) {
+    userModel.battingStyle =state.battingStyle;
+    userModel.bowlingStyle=state.bowlingStyle;
+        state.userService.updateUserData(phoneNumber: user.phoneNumber.toString(), userModel: userModel).then((value) {
       if (value) {
         emit(RegisterationCompletedState(registrationComfirmMsg));
       } else {

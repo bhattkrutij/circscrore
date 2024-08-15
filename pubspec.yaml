@@ -19,6 +19,9 @@ dependencies:
   fluttertoast: ^8.2.5
   hidable: ^1.0.6
   intl: ^0.19.0
+  flutter_svg: ^2.0.5
+  flutter_animate: ^4.5.0
+  sliding_switch: ^1.1.0
 
 dev_dependencies:
   flutter_test:
